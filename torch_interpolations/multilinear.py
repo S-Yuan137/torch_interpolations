@@ -36,6 +36,9 @@ class RegularGridInterpolator:
         dists = []
         overalls = []
         for p, x in zip(self.points, points_to_interp):
+            # make them to the same device
+            p = p.to(x.device)
+            x = x.to(p.device)
             idx_right = torch.bucketize(x, p)
             idx_right[idx_right >= p.shape[0]] = p.shape[0] - 1
             idx_left = (idx_right - 1).clamp(0, p.shape[0] - 1)
